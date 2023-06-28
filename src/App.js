@@ -1,25 +1,40 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from 'react';
+import  Typography  from '@mui/material/Typography';
+import  TextField from '@mui/material/TextField';
 
-function App() {
+const CharacterCounter = () => {
+  const [text, setText] = useState('');
+  const [characterCount, setCharacterCount] = useState(0);
+  const maxCharacters = 100;
+  const remainingCharacters = maxCharacters - characterCount;
+  const isExceedingLimit = characterCount > maxCharacters;
+
+  useEffect(() => {
+    setCharacterCount(text.length);
+  }, [text]);
+
+  const handleTextChange = (event) => {
+    const newText = event.target.value;
+    if (newText.length <= maxCharacters) {
+      setText(newText);
+    }
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <TextField
+        label="Ingresar texto"
+        multiline
+        value={text}
+        onChange={handleTextChange}
+        error={isExceedingLimit}
+        helperText={isExceedingLimit ? 'Límite de caracteres alcanzado' : ''}
+      />
+      <Typography variant="caption">
+        {characterCount}/{maxCharacters} caracteres restantes
+      </Typography>
     </div>
   );
-}
+};
 
-export default App;
+export default CharacterCounter;
